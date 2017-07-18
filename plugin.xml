@@ -183,8 +183,8 @@
         </config-file>
 
 
-        <framework src="com.android.support:support-v4:25.+" />
-        <framework src="com.android.support:appcompat-v7:25.+" />
+        <framework src="com.android.support:support-v4:25.3.1" />
+        <framework src="com.android.support:appcompat-v7:25.3.1" />
         <framework src="com.github.bumptech.glide:glide:3.7.0" />
         <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
         <resource-file src="aar/matisse.aar" target="aar/matisse.aar" />
