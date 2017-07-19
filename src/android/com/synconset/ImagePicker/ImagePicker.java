@@ -4,6 +4,7 @@
 package com.synconset;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 
 import org.apache.cordova.CallbackContext;
@@ -14,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -89,10 +92,8 @@ public class ImagePicker extends CordovaPlugin {
 			ArrayList<String> names = data.getStringArrayListExtra("MULTIPLEFILENAMES");
 			ArrayList<String> result = new ArrayList<String>();
 
-			//get real filepaths for result
 			for(int i=0;i<names.size();i++){
-				Uri uri = Uri.parse(names.get(i));
-				result.add(getRealPathFromURI(uri));
+				result.add(names.get(i));
 			}
 			JSONArray res = new JSONArray(result);
 			this.callbackContext.success(res);
@@ -100,19 +101,6 @@ public class ImagePicker extends CordovaPlugin {
 			this.callbackContext.error("No images selected");
 		}
 	}
-
-	public String getRealPathFromURI(Uri contentUri) {
-		String res = null;
-		String[] proj = { MediaStore.Images.Media.DATA };
-		Cursor cursor = cordova.getActivity().getContentResolver().query(contentUri, proj, null, null, null);
-		if(cursor.moveToFirst()){;
-			int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-			res = cursor.getString(column_index);
-		}
-		cursor.close();
-		return res;
-	}
-
 
 	protected void getReadPermission() {
 		cordova.requestPermissions(this, 0, permissions);

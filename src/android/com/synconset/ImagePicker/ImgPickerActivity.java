@@ -3,10 +3,7 @@ package com.synconset;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 
 import com.zhihu.matisse.Matisse;
@@ -44,11 +41,16 @@ public class ImgPickerActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
 
-            List<Uri> fileUris = Matisse.obtainResult(data);
+            //get filepaths as Strings
+            List<String> paths = Matisse.obtainPathResult(data);
             ArrayList<String> files = new ArrayList<String>();
 
-            for(Uri uri:fileUris) {
-                files.add(uri.toString());
+            for(String path:paths) {
+                try{
+                    files.add(path);
+                }catch(Exception e){
+                    //catch
+                }
             }
 
             Intent res = new Intent();
@@ -65,7 +67,7 @@ public class ImgPickerActivity extends Activity {
 
     private void selectImages(int max, int desiredWidth, int desiredHeight, int quality) {
         Matisse.from(this)
-                .choose(MimeType.of(MimeType.JPEG, MimeType.PNG, MimeType.GIF))
+                .choose(MimeType.of(MimeType.JPEG, MimeType.PNG), false)
                 .countable(false)
                 .maxSelectable(max)
                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
